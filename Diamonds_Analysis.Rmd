@@ -131,19 +131,39 @@ table(diamonds$cut, diamonds$color) # kind of a matrix
 
 ## **Part6:**
 ### Construct some plots
-1. Price Vs color 
+1.  Univariate plot of the cuts
 ```{r}
-ggplot(diamonds, aes(x=color, y=price)) +  geom_boxplot(fill='green')
+#
+ggplot(diamonds, aes(x= cut, fill= cut)) +
+  geom_bar()+
+  labs(x = "Cut",
+       y = "Frequency",
+       title = "Frequency of the cuts")+
+  theme_bw()
 ```
 
-2. Price Vs cut 
+
+2. Price described by carat (in one plot)
 ```{r}
-ggplot(diamonds, aes(x=cut, y=price)) +  geom_boxplot(fill='green')
+ggplot(diamonds, aes(x=carat, y=price, color=clarity))+
+  geom_point(alpha = 0.6,
+             shape = 16)+
+  labs(x = "Carat",
+       y = "Price ($)",
+       title = "Price Vs Carat")+
+  theme_bw()
 ```
 
-3. Frequency Vs cut
+3. Price described by carat (plot for each clarity)
 ```{r}
-barplot(table(diamonds$cut))
+ggplot(diamonds, aes(x=carat, y=price, color=clarity))+
+  geom_point(alpha = 0.6,
+             shape = 16)+
+ facet_wrap(~ clarity, ncol = 4)+
+  labs(x = "Carat",
+       y = "Price ($)",
+       title = "Price Vs Carat")+
+  theme_bw()
 ```
 
 
