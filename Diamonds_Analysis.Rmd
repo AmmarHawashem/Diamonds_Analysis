@@ -3,7 +3,7 @@ title: "Diamonds Dataset Analysis"
 author: "Ammar Al-Hawashem"
 date: "28/09/2021"
 output: 
-  rmrakdown::github_document:
+  html_document:
     df_print: paged
 
 ---
