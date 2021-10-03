@@ -1,0 +1,169 @@
+---
+title: "Diamonds Dataset Analysis"
+author: "Ammar Al-Hawashem"
+date: "28/09/2021"
+output: 
+  html_document:
+    df_print: paged
+
+---
+
+## **Part1:**
+### Set-up
+Let's brong the built-in dataset to our environment: **data(diamonds)**
+
+## **Part2:**
+### Dataset's variabls with their descriptions:
+Variable | Description
+-- | -------------
+price | Price in US dollars ($326 – $18,823)
+carat | Weight of the diamond (0.2 – 5.01)
+cut |Quality of the cut (Fair, Good, Very Good, Premium, Ideal)
+color |Diamond colour, from D (best) to J (worst)
+clarity |A measurement of how clear the diamond is (I1 (worst), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (best))
+x |Length in mm (0 – 10.74)
+y |Width in mm (0 – 58.9)
+z |Depth in mm (0 – 31.8)
+depth |	Total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43–79)
+table |	Width of top of diamond relative to widest point (43–95)
+
+## **Part3:**
+### Exploring the structure of the dataset
+
+Firstly, install tidyverse package: **library(tidyverse)** since some of its functions will be used frequently 
+
+```{r, include=FALSE}
+library(tidyverse)
+```
+```{r}
+glimpse(diamonds) 
+# OR  use the base function: str(diamonds)
+```
+## **Part4:**
+### Summary of the dataset
+To build a great intuition about the dataset, **let's use:**
+```{r}
+summary(diamonds)
+```
+## **Part5:**
+### Apply some calculations
+
+*A- How many diamonds with a clarity of category “IF” are present in the data-set?*
+
+There are many way to calculate this. Here are four different methods:
+
+1. The nested way:
+```{r, echo = TRUE, eval = FALSE}
+nrow(diamonds[diamonds$clarity=="IF",])
+```
+2. By using the forward piping of tidyverse with the exact name of variable (column):
+```{r, echo = TRUE, eval = FALSE}
+diamonds %>% 
+    filter(clarity=="IF") %>% 
+    nrow() -> ifnum
+    ifnum
+```
+3. The shortest way:
+```{r, echo = TRUE, eval = FALSE}
+sum(diamonds$clarity=="IF")
+```
+4. By using the forward piping of tidyverse with the index of variable (column):
+```{r, echo = TRUE, eval = FALSE}
+clarity_IF <- diamonds[4] %>%
+      filter(clarity == "IF")
+    count(clarity_IF)
+```
+All of them will give us the same result: **`r sum(diamonds$clarity=="IF")`**. However, 1,2 & 3 as a vector while 4 is as tibble
+
+
+*B- How many diamonds in each clarity category are present in the data-set?*
+```{r}
+table(diamonds$clarity) # a named vector 
+```
+
+*C- What fraction of the total do the clarity of category “IF” represent?*
+
+Both of the following couple of methods give the solution as a vector
+``` 
+ifnum/nrow(diamonds) #ifnum was defined in the previous question
+```
+```{r}
+nrow(diamonds[diamonds$clarity=="IF",])/nrow(diamonds)
+```
+
+*D- What proportion of the whole is made up of each category of clarity?*
+```{r}
+diamonds %>% 
+  group_by(clarity) %>% 
+  summarise(proportion = length(clarity)/nrow(diamonds))
+                         # or n() instead of length(clarity) 
+```
+*E- What is the cheapest diamond price overall?*
+
+1. To get just the cheapest price, use:
+```{r}
+diamonds %>%  
+  summarise(cheapest = min(price))             # As a tibble
+  #OR
+  min(diamonds$price)                          # AS a vector
+```
+2. To get the full information of the cheapest diamond/s, use:
+```{r}
+diamonds[diamonds$price==min(diamonds$price),]
+```
+
+*F- What is the range of diamond prices?*
+```{r}
+diamonds %>% 
+  summarise(range = max(diamonds$price) - min(diamonds$price))
+```
+
+*G- What is the average diamond price in each category of cut and color?*
+```{r}
+diamonds %>%
+  group_by(color,cut) %>% 
+  summarise(average = mean(price)) # -> avgPrice_cut_color view(avgPrice_cut_color)
+```
+*H- Create a 2-dimensional vector that counts the number of diamonds in each category of cut and color?*
+```{r paged.print=TRUE}
+table(diamonds$cut, diamonds$color) # kind of a matrix
+```
+
+## **Part6:**
+### Construct some plots
+1.  Univariate plot of the cuts
+```{r}
+#
+ggplot(diamonds, aes(x= cut, fill= cut)) +
+  geom_bar()+
+  labs(x = "Cut",
+       y = "Frequency",
+       title = "Frequency of the cuts")+
+  theme_bw()
+```
+
+
+2. Price described by carat (in one plot)
+```{r}
+ggplot(diamonds, aes(x=carat, y=price, color=clarity))+
+  geom_point(alpha = 0.6,
+             shape = 16)+
+  labs(x = "Carat",
+       y = "Price ($)",
+       title = "Price Vs Carat")+
+  theme_bw()
+```
+
+3. Price described by carat (plot for each clarity)
+```{r}
+ggplot(diamonds, aes(x=carat, y=price, color=clarity))+
+  geom_point(alpha = 0.6,
+             shape = 16)+
+ facet_wrap(~ clarity, ncol = 4)+
+  labs(x = "Carat",
+       y = "Price ($)",
+       title = "Price Vs Carat")+
+  theme_bw()
+```
+
+
