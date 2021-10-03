@@ -2,4 +2,4 @@
 
 text ...
 
-[some more](mnt/c/Users/AmmarYasser/Documents/Diamonds_Analysis/Diamonds_Analysis.html)
+[some more](./mnt/c/Users/AmmarYasser/Documents/Diamonds_Analysis/Diamonds_Analysis.html)
