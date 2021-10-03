@@ -1,5 +1,5 @@
 # Diamonds_Analysis
-This repo is regrading analyzing the R: built-in dataset (diamonds)
+This repo is regrading analyzing the R: built-in dataset (diamonds)\
 The repo includes:
 - A brief exploring of the dataset
 - Answering some questions regarding the data
