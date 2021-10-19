@@ -1,4 +1,4 @@
 # Diamonds_Analysis
 
 
-[some more](./Diamonds_Analysis.html)
+[some more](https://ammarhawashem.github.io/Diamonds_Analysis/)
